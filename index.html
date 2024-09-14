@@ -34,7 +34,7 @@
             cursor: pointer;
         }
         button:disabled {
-            background-color: #ccc;
+            background-color: #898787;
             cursor: not-allowed;
         }
         .result {
@@ -106,7 +106,7 @@
 
         // Display results
         document.getElementById('result').innerHTML = `
-            <div><p>Total Commission: ৳ ${totalCommission.toFixed(2)}</p></div>
+            <div><p style="color: #898787; font-size: 14px;">Total Commission: ৳ ${totalCommission.toFixed(2)}</p></div>
             <div><p><strong>Remaining Balance: ৳</strong> ${remainingBalance.toFixed(2)}</p></div>
             <div><p><strong>Net Ledger Balance: ৳</strong> ${netLedgerBalance.toFixed(2)}</p></div>
         `;
