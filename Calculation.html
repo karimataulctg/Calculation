@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission and Ledger Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px auto;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #bbb9b9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        input[type="number"], button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #c0bebe;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            /* margin-top: 10px; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        @media (max-width: 600px) {
+    /* CSS for mobile devices */
+    .container{
+        width: 80% !important;
+    }
+   h2 {
+    font-size: 16px;
+    font-weight: 700;
+   }
+}
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Commission and Ledger Calculator</h2>
+<div class="container">
+    
+    
+    <div><label for="buy">Buy Amount:</label>
+        <input type="number" id="buy" value="0" step="any"></div>
+    
+    <div><label for="sell">Sell Amount:</label>
+        <input  type="number" id="sell" value="0" step="any"></div>
+    
+   <div> <label for="commission">Commission Rate (%):</label>
+    <input type="number" id="commission" value="0.40" step="any"></div>
+    
+    <div><label for="ledger">Ledger Balance:</label>
+        <input type="number" id="ledger" value="0" step="any"></div>
+    
+    <div><button onclick="calculate()">Calculate</button></div>
+        <div><button onclick="resetFields()">Reset</button></div>
+    </div>
+
+    <div class="result" id="result"></div>
+
+
+<script>
+    function calculate() {
+        // Get input values
+        const buy = parseFloat(document.getElementById('buy').value);
+        const sell = parseFloat(document.getElementById('sell').value);
+        const commissionRate = parseFloat(document.getElementById('commission').value);
+        const ledgerBalance = parseFloat(document.getElementById('ledger').value);
+
+        // Validate inputs
+        if (isNaN(buy) || isNaN(sell) || isNaN(commissionRate) || isNaN(ledgerBalance)) {
+            alert('Please enter valid numbers for all fields.');
+            return;
+        }
+
+        // Calculate Total Commission
+        const totalCommission = (buy + sell) * (commissionRate / 100);
+
+        // Calculate Remaining Balance
+        const remainingBalance = sell - buy - totalCommission;
+
+        // Calculate Net Ledger Balance
+        const netLedgerBalance = ledgerBalance + remainingBalance;
+
+        // Display results
+        document.getElementById('result').innerHTML = `
+            <div><p>Total Commission: ৳ ${totalCommission.toFixed(2)}</p></div>
+            <div><p><strong>Remaining Balance: ৳</strong> ${remainingBalance.toFixed(2)}</p></div>
+            <div><p><strong>Net Ledger Balance: ৳</strong> ${netLedgerBalance.toFixed(2)}</p></div>
+        `;
+    }
+
+    function resetFields() {
+        document.getElementById('buy').value = '0';
+        document.getElementById('sell').value = '0';
+        document.getElementById('commission').value = '0.40';
+        document.getElementById('ledger').value = '0';
+        document.getElementById('result').innerHTML = '';
+    }
+</script>
+<footer style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+    &copy; 2024 All rights reserved. &nbsp; 
+    <a href="https://ataulkarim.w3spaces.com/" target="_blank" > Ataul Karim</a> 
+</footer>
+
+</body>
+</html>
