@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commission and Ledger Calculator</title>
     <link rel="shortcut icon" href="calculator.png" type="image/x-icon">
+    <script src=""></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,6 +46,7 @@
             justify-content: center;
             
         }
+       
         @media (max-width: 600px) {
     /* CSS for mobile devices */
     .container{
@@ -53,6 +55,7 @@
    h2 {
     font-size: 16px;
     font-weight: 700;
+   
    }
 }
     </style>
@@ -83,42 +86,59 @@
 
 <script>
     function calculate() {
-        // Get input values
-        const buy = parseFloat(document.getElementById('buy').value);
-        const sell = parseFloat(document.getElementById('sell').value);
-        const commissionRate = parseFloat(document.getElementById('commission').value);
-        const ledgerBalance = parseFloat(document.getElementById('ledger').value);
+    // Get input values
+    const buy = parseFloat(document.getElementById('buy').value);
+    const sell = parseFloat(document.getElementById('sell').value);
+    const commissionRate = parseFloat(document.getElementById('commission').value);
+    const ledgerBalance = parseFloat(document.getElementById('ledger').value);
 
-        // Validate inputs
-        if (isNaN(buy) || isNaN(sell) || isNaN(commissionRate) || isNaN(ledgerBalance)) {
-            alert('Please enter valid numbers for all fields.');
-            return;
-        }
-
-        // Calculate Total Commission
-        const totalCommission = (buy + sell) * (commissionRate / 100);
-
-        // Calculate Remaining Balance
-        const remainingBalance = sell - buy - totalCommission;
-
-        // Calculate Net Ledger Balance
-        const netLedgerBalance = ledgerBalance + remainingBalance;
-
-        // Display results
-        document.getElementById('result').innerHTML = `
-            <div><p style="color: #898787; font-size: 14px;">Total Commission: ৳ ${totalCommission.toFixed(2)}</p></div>
-            <div><p><strong>Remaining Balance: ৳</strong> ${remainingBalance.toFixed(2)}</p></div>
-            <div><p><strong>Net Ledger Balance: ৳</strong> ${netLedgerBalance.toFixed(2)}</p></div>
-        `;
+    // Validate inputs
+    if (isNaN(buy) || isNaN(sell) || isNaN(commissionRate) || isNaN(ledgerBalance)) {
+        alert('Please enter valid numbers for all fields.');
+        return;
     }
 
-    function resetFields() {
-        document.getElementById('buy').value = '0';
-        document.getElementById('sell').value = '0';
-        document.getElementById('commission').value = '0.40';
-        document.getElementById('ledger').value = '0';
-        document.getElementById('result').innerHTML = '';
-    }
+    // Calculate Total Commission
+    const totalCommission = (buy + sell) * (commissionRate / 100);
+
+    // Calculate Remaining Balance
+    const remainingBalance = sell - buy - totalCommission;
+
+    // Calculate Net Ledger Balance
+    const netLedgerBalance = ledgerBalance + remainingBalance;
+
+    // Determine color based on remaining balance (positive = green, negative = red)
+    const balanceColor = remainingBalance > 0 ? 'green' : 'red';
+
+    // Determine color based on net ledger balance (positive = green, negative = red)
+    const ledgerColor = netLedgerBalance > 0 ? 'green' : 'red';
+
+    // Display results
+    // document.getElementById('result').innerHTML = `
+    //     <div style="border: 2px solid black; border-radius: 15px; padding: 10px;">
+    //         <div><p style="color: #898787; font-size: 14px;">Total Commission: ৳ ${totalCommission.toFixed(2).toLocaleString()}</p></div>
+    //         <div><p style="color: ${balanceColor};"><strong>Remaining Balance: ৳</strong> ${remainingBalance.toFixed(2).toLocaleString()}</p></div>
+    //         <div><p style="color: ${ledgerColor};"><strong>Net Ledger Balance: ৳</strong> ${netLedgerBalance.toFixed(2).toLocaleString()}</p></div>
+    //     </div>
+    // `;
+
+    document.getElementById('result').innerHTML = `
+        <div style="border: 1px solid #bbb9b9; border-radius: 10px; padding: 20px; margin-top:15px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+            <div><p style="color: #898787; font-size: 14px;">Total Commission: ৳ ${totalCommission.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+            <div><p style="color: ${balanceColor};"><strong>Remaining Balance: ৳</strong> ${remainingBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+            <div><p style="color: ${ledgerColor};"><strong>Net Ledger Balance: ৳</strong> ${netLedgerBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+        </div>
+    `;
+}
+
+function resetFields() {
+    document.getElementById('buy').value = '0';
+    document.getElementById('sell').value = '0';
+    document.getElementById('commission').value = '0.40';
+    document.getElementById('ledger').value = '0';
+    document.getElementById('result').innerHTML = '';
+}
+
 </script>
 <footer style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
     &copy; 2024 All rights reserved. &nbsp; 
