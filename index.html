@@ -33,11 +33,16 @@
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        button:disabled {
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* button:disabled {
             background-color: #898787;
             cursor: not-allowed;
-        }
+        } */
         .result {
             /* margin-top: 10px; */
             display: flex;
@@ -108,10 +113,10 @@
     const netLedgerBalance = ledgerBalance + remainingBalance;
 
     // Determine color based on remaining balance (positive = green, negative = red)
-    const balanceColor = remainingBalance > 0 ? 'green' : 'red';
+    const balanceColor = remainingBalance >= 0 ? 'green' : 'red';
 
     // Determine color based on net ledger balance (positive = green, negative = red)
-    const ledgerColor = netLedgerBalance > 0 ? 'green' : 'red';
+    const ledgerColor = netLedgerBalance >= 0 ? 'green' : 'red';
 
     // Display results
     // document.getElementById('result').innerHTML = `
