@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+
+  <title>Image Resizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .preview {
+      margin-top: 20px;
+    }
+
+    .download {
+      display: none;
+      margin-top: 20px;
+      text-decoration: none;
+      padding: 10px;
+      background-color: #a3e635;
+      color: black;
+      border-radius: 5px;
+      font: bold;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col justify-center items-center">
+
+  <!-- Section for Picture Resize -->
+  <section class="border-2 p-2 m-4">
+    <span class="btn btn-sm mb-2"><a href="./index.html">Back to Calculation</a></span>
+    <h1 class="text-center text-xl font-bold bg-lime-400 mb-4 rounded-lg">Picture Resize:</h1>
+    <input type="file" id="upload-picture" accept="image/*"
+      class="file-input file-input-bordered file-input-success file-input-sm w-full max-w-xs " /> <br><br>
+
+    <!-- <input class="" type="file" id="upload-picture" accept="image/*"><br><br> -->
+
+    <!-- <label for="width-picture">Width: </label>
+    <input type="number" id="width-picture" placeholder="New width" value="585"><br><br>
+    
+    <label for="height-picture">Height: </label>
+    <input type="number" id="height-picture" placeholder="New height" value="700"><br><br> -->
+    <div class="flex gap-2">
+      <div class="flex-1 outline rounded-lg p-1 text-center">
+        <label class="font-bold" for="width-picture">Width: </label>
+        <select id="width-picture">
+          <option value="585">585</option>
+          <option value="300">300</option>
+        </select>
+
+      </div>
+      <div class="flex-1 outline rounded-lg p-1 text-center">
+        <label class="font-bold" for="height-picture">Height: </label>
+        <select id="height-picture">
+          <option value="700">700</option>
+          <option value="80">80</option>
+        </select>
+      </div>
+    </div>
+    <br>
+
+    <button class="btn btn-outline btn-sm bg-lime-400 w-full" id="resize-picture">Resize Image</button><br><br>
+
+    <a id="download-picture" class="download">Download Resized Image</a>
+
+    <canvas id="canvas-picture" style="display: none;"></canvas>
+
+    <div class="preview">
+      <h3 class="font-bold">Resized Image:</h3>
+      <img id="output-picture" alt="Resized image will appear here">
+    </div>
+  </section>
+
+  <script>
+    function handleImageUpload(event, section) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          section.originalImage = new Image();
+          section.originalImage.src = e.target.result;
+          section.originalImage.onload = function () {
+            // Only set width and height if they haven't been changed by the user
+            if (!section.widthChanged) {
+              document.getElementById(section.widthId).value = section.originalImage.width;
+            }
+            if (!section.heightChanged) {
+              document.getElementById(section.heightId).value = section.originalImage.height;
+            }
+          };
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please upload a valid image file.');
+      }
+    }
+
+    function resizeImage(section) {
+      if (!section.originalImage) {
+        alert('Please upload an image first.');
+        return;
+      }
+
+      const newWidth = parseInt(document.getElementById(section.widthId).value, 10);
+      const newHeight = parseInt(document.getElementById(section.heightId).value, 10);
+
+      if (isNaN(newWidth) || isNaN(newHeight)) {
+        alert('Please enter valid dimensions.');
+        return;
+      }
+
+      const canvas = document.getElementById(section.canvasId);
+      const ctx = canvas.getContext('2d');
+
+      // Set canvas to new dimensions
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      // Draw the resized image onto the canvas
+      ctx.drawImage(section.originalImage, 0, 0, newWidth, newHeight);
+
+      // Get the resized image data as a base64 string
+      const resizedImageURL = canvas.toDataURL('image/jpeg');
+
+      // Display the resized image
+      document.getElementById(section.outputId).src = resizedImageURL;
+
+      // Enable and update the download link
+      const downloadLink = document.getElementById(section.downloadId);
+      downloadLink.style.display = 'inline';
+      downloadLink.href = resizedImageURL;
+      downloadLink.download = 'resized_image.jpg';
+    }
+
+    // Section configuration object
+    const pictureSection = {
+      uploadId: 'upload-picture',
+      widthId: 'width-picture',
+      heightId: 'height-picture',
+      resizeId: 'resize-picture',
+      downloadId: 'download-picture',
+      canvasId: 'canvas-picture',
+      outputId: 'output-picture',
+      originalImage: null,
+      widthChanged: false,
+      heightChanged: false,
+    };
+
+    // Event listeners for width and height changes
+    document.getElementById(pictureSection.widthId).addEventListener('input', () => {
+      pictureSection.widthChanged = true;
+    });
+    document.getElementById(pictureSection.heightId).addEventListener('input', () => {
+      pictureSection.heightChanged = true;
+    });
+
+    // Event listeners for file upload and resize button
+    document.getElementById(pictureSection.uploadId).addEventListener('change', (e) => handleImageUpload(e, pictureSection));
+    document.getElementById(pictureSection.resizeId).addEventListener('click', () => resizeImage(pictureSection));
+  </script>
+</body>
+
+</html>
